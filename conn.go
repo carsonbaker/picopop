@@ -33,7 +33,7 @@ func (c *connection) reader() {
     axel_f := sequencer.AxelFMelody{}
     buf := axel_f.Play()
 
-    h.broadcast <- buf
+    c.send <- buf
 
   }
   c.ws.Close()

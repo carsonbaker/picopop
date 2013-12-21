@@ -15,7 +15,6 @@ type hub struct {
 }
 
 var h = hub {
-	broadcast:   make(chan []byte),
 	register:    make(chan *connection),
 	unregister:  make(chan *connection),
 	connections: make(map[*connection]bool),
@@ -32,16 +31,6 @@ func (h *hub) run() {
 			delete(h.connections, c)
 			close(c.send)
 
-		case m := <-h.broadcast:
-			for c := range h.connections {
-				select {
-				case c.send <- m:
-				default:
-					delete(h.connections, c)
-					close(c.send)
-					go c.ws.Close()
-				}
-			}
 		}
 		
 	}
