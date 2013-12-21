@@ -13,11 +13,22 @@ type note struct {
 func PlaySweepTest() []int16 {
   instr := instruments.SineGenerator{}
   audio := []int16{}
-  root := instr.Play(100, 0.1) // 800 samples long
+  root := instr.Play(10, 0.1) // 800 samples long
 
-  for i := 1.0; i < 32.0; i+= 0.025 {
-    audio = append(audio, instruments.ChangePitch(root, i)...)
+
+  
+  shifted := instruments.ChangePitch(root, 80)
+  for duration := 0; duration < 800; {
+    duration += len(audio)
+    audio = append(audio, shifted...)
   }
+  
+  // silence := instruments.SilenceGenerator{}.Play(100)
+
+  // for i := 1.0; i < 32.0; i+= 0.025 {
+  //   audio = append(audio, instruments.ChangePitch(root, i)...)
+  //   // audio = append(audio, sil...)
+  // }
 
   // audio = root
 
