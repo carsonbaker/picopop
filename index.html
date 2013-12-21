@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Carson's Audio Synth</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+<!-- Optional theme -->
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+
+    var conn;
+    var msg = $("#msg");
+    var log = $("#log");
+
+    var audioContext;
+
+    try {
+        // Fix up for prefixing
+        window.AudioContext = window.AudioContext||window.webkitAudioContext;
+        audioContext = new AudioContext();
+    }
+    catch(e) {
+        alert('Web Audio API is not supported in this browser');
+    }
+
+    function playAudio(data) {
+        var startTime = 0;
+        var fileReader = new FileReader();
+        fileReader.onload = function (e) {
+            var data = new DataView(e.target.result);
+
+            var INCOMING_RATE = 8000;
+            var OUTGOING_RATE = 32000;
+            var UPSAMPLE_RATIO = OUTGOING_RATE / INCOMING_RATE;
+
+            var incoming_length = data.byteLength / Int16Array.BYTES_PER_ELEMENT
+
+            var audio = new Int16Array(incoming_length * UPSAMPLE_RATIO);
+            var len = audio.length;
+
+            var gg = 0
+            for (var jj = 0; jj < incoming_length; jj++) {
+                // TODO -- to get rid of the aliasing effect this has on the audio
+                // some sort of interpolation between the samples should be applied here.
+                for (var hh = gg; hh < gg+UPSAMPLE_RATIO; hh++) {
+                    audio[hh] = data.getInt16(jj * Int16Array.BYTES_PER_ELEMENT, false);
+                }   
+                gg += UPSAMPLE_RATIO
+            }
+
+            var right = new Float32Array(audio.length);
+            var left = new Float32Array(audio.length);
+
+            var channleCounter = 0;
+            for (var i = 0; i < audio.length-1; i += 2) {
+                var normalizedRight = audio[i] / 32768
+                var normalizedLeft  = audio[i+1] / 32768
+                right[channleCounter] = normalizedRight;
+                left[channleCounter] = normalizedLeft
+                channleCounter++;
+            }
+
+            var source = audioContext.createBufferSource();
+
+            var audioBuffer = audioContext.createBuffer(2, right.length, OUTGOING_RATE);
+            audioBuffer.getChannelData(0).set(right);
+            audioBuffer.getChannelData(1).set(left);
+
+            source.buffer = audioBuffer;
+
+            source.connect(audioContext.destination);
+
+            source.noteOn(startTime);
+            startTime += audioBuffer.duration;
+
+        };
+        fileReader.readAsArrayBuffer(data)
+    }
+
+    $("#form").submit(function() {
+        if (!conn) {
+            return false;
+        }
+        if (!msg.val()) {
+            return false;
+        }
+        conn.send(msg.val());
+        return false
+    });
+
+    if (window["WebSocket"]) {
+        conn = new WebSocket("ws://{{$}}/ws");
+        conn.onclose = function(evt) {
+            
+        }
+        conn.onmessage = function(evt) {
+            playAudio(evt.data)
+        }
+    } else {
+        alert($("<div><b>Your browser does not support WebSockets.</b></div>"))
+    }
+    });
+</script>
+
+</head>
+<body>
+
+<div class="container">
+    <div class="page-header">
+      <h1>Carson &amp; Wade's Audio Synth<br/><small>WebSocket playback test, remote synthesizing</small></h1>
+    </div>
+
+    <form id="form">
+        <input type="number" id="msg" size="10" min="50" max="20000" placeholder="440" value="440"/>
+        hz
+        <br />
+        <br />
+        <input type="submit" value="Play" class="btn btn-primary" />
+    </form>
+</div>
+
+</body>
+</html>
