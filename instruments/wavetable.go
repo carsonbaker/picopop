@@ -66,6 +66,21 @@ func waveForPitch(freq float64, path string) []int16 {
   return ChangePitch(shorts, freq / 100.0) // 100 hz is the root frequency of the file audio
 }
 
+func (s WavetableGenerator) Play2(freq float64, duration float64) []int16 {
+
+  waveform := waveForPitch(100, "samples/wavetable/vocal/v1.raw")
+  stretch := freq / 100.0
+  index := 0.0
+
+  generator := func(pos int) int16 {
+    cursor := int(index) % len(waveform)
+    index += stretch
+    return waveform[cursor]
+  }
+  return s.RunBuffer(generator, duration)
+
+}
+
 func (s WavetableGenerator) Play(freq float64, duration float64) []int16 {
 
   waveform_count := 0

@@ -7,7 +7,7 @@ import(
 )
 
 func RenderBeefyFartSong() []byte {
-  pcm := sequencer.PlaySweepTest()
+  pcm := sequencer.PlayTestMelody()
   bytes  := mixer.MixToBytes(pcm, global.BytesPerSample)
   return bytes
 }
