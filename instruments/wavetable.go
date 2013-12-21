@@ -11,8 +11,7 @@ type WavetableGenerator struct {
   SimpleParent
 }
 
-
-func changePitch(input []int16, stretch float64) []int16 {
+func ChangePitch(input []int16, stretch float64) []int16 {
   index := float64(0.0)
   input_len := len(input)
   output_len := int(float64(input_len) / stretch)
@@ -40,10 +39,10 @@ func waveForPitch(freq float64, path string) []int16 {
   raw, err := ioutil.ReadFile(path)
   if err != nil { panic(err) }
   shorts := util.BytesToInt16(raw)
-  return changePitch(shorts, freq / 100.0) // 100 hz is the root frequency of the file audio
+  return ChangePitch(shorts, freq / 100.0) // 100 hz is the root frequency of the file audio
 }
 
-func (s WavetableGenerator) Play(freq float64, duration float64) []byte {
+func (s WavetableGenerator) Play(freq float64, duration float64) []int16 {
 
   waveform_count := 0
   first := true

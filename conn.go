@@ -4,7 +4,7 @@ import (
   "github.com/gorilla/websocket"
   "net/http"
   "strconv"
-  "github.com/carsonbaker/copenhagen/sequencer"
+  "github.com/carsonbaker/copenhagen/songs"
 )
 
 type connection struct {
@@ -30,8 +30,8 @@ func (c *connection) reader() {
     }
 
     freq = freq + 1
-    axel_f := sequencer.AxelFMelody{}
-    buf := axel_f.Play()
+
+    buf := songs.RenderBeefyFartSong()
 
     c.send <- buf
 
