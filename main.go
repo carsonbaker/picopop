@@ -5,6 +5,7 @@ import (
   "log"
   "text/template"
   "net/http"
+  "os"
 )
 
 var addr = flag.String("addr", ":8080", "http service address")
@@ -15,11 +16,18 @@ func homeHandler(c http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
+
   flag.Parse()
   go h.run()
   http.HandleFunc("/", homeHandler)
   http.HandleFunc("/ws", wsHandler)
+
+  if os.Getenv("PORT") != "" {
+    *addr = ":"+os.Getenv("PORT")
+  }
+
   if err := http.ListenAndServe(*addr, nil); err != nil {
     log.Fatal("ListenAndServe:", err)
   }
+
 }
