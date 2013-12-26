@@ -8,7 +8,7 @@ import (
 )
 
 type WavetableGenerator struct {
-  SimpleParent
+
 }
 
 func InterpolateHermite4pt3oX(x []int16, ineg1 int, i0 int, i1 int, i2 int, t float64) int16 {
@@ -59,53 +59,53 @@ func ChangePitch(input []int16, stretch float64) []int16 {
   return output
 }
 
-func waveForPitch(freq float64, path string) []int16 {
+func waveFromFile(path string) []int16 {
   raw, err := ioutil.ReadFile(path)
   if err != nil { panic(err) }
-  shorts := util.BytesToInt16(raw)
-  return ChangePitch(shorts, freq / 100.0) // 100 hz is the root frequency of the file audio
+  return util.BytesToInt16(raw)
 }
 
-func (s WavetableGenerator) Play2(freq float64, duration float64) []int16 {
-
-  waveform := waveForPitch(100, "samples/wavetable/vocal/v1.raw")
-  stretch := freq / 100.0
-  index := 0.0
-
-  generator := func(pos int) int16 {
-    cursor := int(index) % len(waveform)
-    index += stretch
-    return waveform[cursor]
-  }
-  return s.RunBuffer(generator, duration)
-
+func waveFromFileForPitch(freq float64, path string) []int16 {
+  return ChangePitch(waveFromFile(path), freq) // 100 hz is the root frequency of the file audio
 }
 
-func (s WavetableGenerator) Play(freq float64, duration float64) []int16 {
+func (s WavetableGenerator) Play(freq float64, duration int) []int16 {
 
-  waveform_count := 0
-  first := true
-  waveform := waveForPitch(freq, "samples/wavetable/vocal/v1.raw")
-  
+  waveform       := waveFromFile("samples/wavetable/vfs48-16/1.raw")
+  waveform_freq  := 100.0
+  stretch        := freq / waveform_freq
+  index          := 0.0
+  waveform_count := 1
+  repeat         := -1
+  repeat_count   := 0
+  wave_max       := 38
+
   generator := func(pos int) int16 {
 
     pos_in_cycle := pos % len(waveform)
 
-    if pos_in_cycle == 0 && !first {
-      waveform_count = waveform_count % 104 + 1
-      fmt.Println("Using waveform", (waveform_count/8)+1)
-      waveform_path := fmt.Sprintf("samples/wavetable/vocal/v%d.raw",(waveform_count/8)+1)
-      waveform = waveForPitch(freq, waveform_path)
+    if pos_in_cycle == 0 {
+      if(waveform_count != wave_max) {
+        if repeat_count > repeat {
+
+          waveform_path := fmt.Sprintf("samples/wavetable/vfs48-16/%d.raw",waveform_count)
+          waveform = waveFromFile(waveform_path)
+          waveform_count = (waveform_count + 1) % 39
+          if waveform_count == 0 {
+            waveform_count = 1 
+          } 
+          repeat_count = 0
+        }
+        repeat_count++
+      }
     }
 
-    first = false
-
-    // fmt.Println(floats[pos_in_cycle]))
-
-    return waveform[pos_in_cycle]
-    // return b[int(pos)] b[int(pos)+1]
+    cursor := int(index) % len(waveform)
+    index += stretch
+    return waveform[cursor]
 
   }
-  return s.RunBuffer(generator, duration)
+
+  return RunBuffer(generator, duration)
 
 }

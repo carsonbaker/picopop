@@ -3,7 +3,9 @@
 <head>
 <title>Copenhagen Audio Synth</title>
 <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="//yui.yahooapis.com/pure/0.3.0/pure-min.css">
+<link rel="stylesheet" href="//purecss.io/css/layouts/side-menu.css">
+
 <!-- Optional theme -->
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 <script type="text/javascript">
@@ -30,8 +32,8 @@
         fileReader.onload = function (e) {
             var data = new DataView(e.target.result);
 
-            var INCOMING_RATE = 8000;
-            var OUTGOING_RATE = 32000;
+            var INCOMING_RATE = 48000;
+            var OUTGOING_RATE = 48000; // 32000 is minimum
             var UPSAMPLE_RATIO = OUTGOING_RATE / INCOMING_RATE;
 
             var incoming_length = data.byteLength / Int16Array.BYTES_PER_ELEMENT
@@ -105,19 +107,65 @@
 
 </head>
 <body>
-
+<!-- 
 <div class="container">
     <div class="page-header">
       <h1>Copenhagen<br/><small>WebSocket playback test, remote synthesizing</small></h1>
     </div>
 
-    <form id="form">
-        <input type="number" id="msg" size="10" min="50" max="20000" placeholder="440" value="440"/>
-        hz
-        <br />
-        <br />
-        <input type="submit" value="Play" class="btn btn-primary" />
-    </form>
+
+</div>
+ -->
+
+<div id="layout">
+    <!-- Menu toggle -->
+    <a href="#menu" id="menuLink" class="menu-link">
+        <!-- Hamburger icon -->
+        <span></span>
+    </a>
+
+    <div id="menu">
+        <div class="pure-menu pure-menu-open">
+            <a class="pure-menu-heading" href="http://purecss.io/">Synthicode</a>
+
+            <ul>
+                <li class="pure-menu-selected"><a href="http://purecss.io/base/">Sequence</a></li>
+                <li><a href="http://purecss.io/grids/">Instruments</a></li>
+                <li><a href="http://purecss.io/forms/">Effects</a></li>
+                <li><a href="http://purecss.io/tables/">Mastering</a></li>
+
+                <li class="menu-item-divided"><a href="http://purecss.io/layouts/">Discussion</a></li>
+                <li><a href="http://purecss.io/customize/">Explore</a></li>
+                <li><a href="http://purecss.io/extend/">Promote</a></li>
+                <li><a href="http://blog.purecss.io/">Blog</a></li>
+                <li><a href="https://github.com/yui/pure/releases/">How-To</a></li>
+
+                <li class="menu-item-divided">
+                    <a href="http://yui.github.io/skinbuilder/?mode=pure">About</a>
+                </li>
+                <li><a href="http://yuilibrary.com/">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="main">
+
+        <br/>
+        <br/>
+ 
+        <div class="content">
+        
+            <form id="form">
+                <input type="number" id="msg" size="10" min="50" max="20000" placeholder="440" value="440"/>
+                hz
+                <br />
+                <br />
+                <button type="submit" class="pure-button pure-button-primary">Play</button>
+            </form>
+
+        </div>
+
+    </div>
 </div>
 
 </body>

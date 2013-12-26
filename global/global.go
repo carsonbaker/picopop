@@ -2,7 +2,7 @@ package global
 
 import ("math")
 
-const Samplerate      = 8000
+const Samplerate      = 48000
 const Channels        = 2
 const TwoPi           = math.Pi * 2
 const BitDepth        = 16

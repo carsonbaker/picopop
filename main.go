@@ -6,6 +6,7 @@ import (
   "text/template"
   "net/http"
   "os"
+  "github.com/carsonbaker/copenhagen/util"
 )
 
 var addr = flag.String("addr", ":8080", "http service address")
@@ -16,6 +17,8 @@ func homeHandler(c http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
+
+  util.Initialize()
 
   flag.Parse()
   go h.run()
