@@ -7,7 +7,7 @@ import (
 )
 
 type SquareGenerator struct {
-
+  EffectedInstrument
 }
 
 func (s SquareGenerator) Play(freq float64, duration int) []int16 {
@@ -16,5 +16,7 @@ func (s SquareGenerator) Play(freq float64, duration int) []int16 {
     sample := math.Sin(phase_angle)
     if sample > 0 { return util.AudioFloatToInt16(1) } else { return util.AudioFloatToInt16(0) }
   }
-  return RunBuffer(generator, duration)
+
+  buffer := RunBuffer(generator, duration)
+  return s.EffectBuffer(buffer)
 }

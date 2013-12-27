@@ -21,13 +21,13 @@ func RenderBeefyFartSong() []byte {
 
   // convert string notes to float amounts
   for _, user_note := range user_melody {
-    matrix_note := sequencer.Note{ util.Pitches[user_note.note_symbol] * 3 , user_note.duration }
+    matrix_note := sequencer.Note{ util.Pitches[user_note.note_symbol] * 4 , user_note.duration }
     matrix_melody = append(matrix_melody, matrix_note)
   }
 
   sequencer1 := sequencer.MatrixSequencer{}
   sequencer1.Melody = matrix_melody
-  sequencer1.Instrument = instruments.SineGenerator{}
+  sequencer1.Instrument = instruments.SquareGenerator{}
 
   pcm := sequencer1.RenderAll()
   bytes  := mixer.MixToBytes(pcm, global.BytesPerSample)

@@ -7,7 +7,7 @@ import (
 )
 
 type SineGenerator struct {
-
+  EffectedInstrument
 }
 
 func (s SineGenerator) Play(freq float64, duration int) []int16 {

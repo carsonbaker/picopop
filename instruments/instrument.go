@@ -1,7 +1,15 @@
 package instruments
 
+import (
+  "github.com/carsonbaker/copenhagen/effects"
+)
+
 type Instrument interface {
   Play(freq float64, duration int) []int16
+}
+
+type EffectedInstrument struct {
+  enveloper effects.Enveloper
 }
 
 func RunBuffer(generator func(int) int16, duration int) []int16 {
@@ -10,4 +18,8 @@ func RunBuffer(generator func(int) int16, duration int) []int16 {
     buffer[i] = generator(i)
   }
   return buffer
+}
+
+func (ei EffectedInstrument) EffectBuffer(buffer []int16) []int16 {
+  return ei.enveloper.Filter(buffer)
 }

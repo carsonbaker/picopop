@@ -40,30 +40,8 @@ func (ms MatrixSequencer) RenderAll() []int16 {
   audio := []int16{}
 
   for _, note := range ms.Melody {
+    // render the instrument noise
     note_buffer := ms.Instrument.Play(note.Freq, note.Duration * hemidemisemiquaver_duration_samples)
-
-    // TODO
-    // this should go into some kind of envelope patch class
-    // this code does not belong here..
-
-    // linearly advance the first n samples
-    attack_length := 800 // in samples
-    attack_start := 0
-    for i := attack_start; i < attack_length; i++ {
-      note_buffer[i] = int16(float64(note_buffer[i]) * (float64(i) / float64(attack_length)))
-    }
-
-    // linearly decay the last n samples
-    decay_length := 800 // in samples
-    decay_start := len(note_buffer) - decay_length
-    for i := decay_start; i < len(note_buffer); i++ {
-      distance := len(note_buffer) - i 
-      note_buffer[i] = int16(float64(note_buffer[i]) * (float64(distance) / float64(decay_length)))
-    }
-
-    // end this code does not belong here
-
-
     audio = append(audio, note_buffer...)
   }
 

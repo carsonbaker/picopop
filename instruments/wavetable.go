@@ -8,7 +8,7 @@ import (
 )
 
 type WavetableGenerator struct {
-
+  EffectedInstrument
 }
 
 func InterpolateHermite4pt3oX(x []int16, ineg1 int, i0 int, i1 int, i2 int, t float64) int16 {
