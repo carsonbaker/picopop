@@ -16,6 +16,10 @@ func homeHandler(c http.ResponseWriter, req *http.Request) {
   homeTempl.Execute(c, req.Host)
 }
 
+func jqueryHandler(c http.ResponseWriter, req *http.Request) {
+  template.Must(template.ParseFiles("assets/js/jquery.min.js")).Execute(c, req.Host)
+}
+
 func main() {
 
   util.Initialize()
@@ -24,6 +28,7 @@ func main() {
   go h.run()
   http.HandleFunc("/", homeHandler)
   http.HandleFunc("/ws", wsHandler)
+  http.HandleFunc("/assets/js/jquery.min.js", jqueryHandler)
 
   if os.Getenv("PORT") != "" {
     *addr = ":"+os.Getenv("PORT")

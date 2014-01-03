@@ -27,7 +27,7 @@ func RenderBeefyFartSong() []byte {
 
   sequencer1 := sequencer.MatrixSequencer{}
   sequencer1.Melody = matrix_melody
-  sequencer1.Instrument = instruments.SquareGenerator{}
+  sequencer1.Instrument = instruments.WavetableGenerator{}
 
   pcm := sequencer1.RenderAll()
   bytes  := mixer.MixToBytes(pcm, global.BytesPerSample)

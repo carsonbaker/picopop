@@ -87,7 +87,6 @@ func (s WavetableGenerator) Play(freq float64, duration int) []int16 {
     if pos_in_cycle == 0 {
       if(waveform_count != wave_max) {
         if repeat_count > repeat {
-
           waveform_path := fmt.Sprintf("samples/wavetable/vfs48-16/%d.raw",waveform_count)
           waveform = waveFromFile(waveform_path)
           waveform_count = (waveform_count + 1) % 39
@@ -106,6 +105,7 @@ func (s WavetableGenerator) Play(freq float64, duration int) []int16 {
 
   }
 
-  return RunBuffer(generator, duration)
+  buffer := RunBuffer(generator, duration)
+  return s.EffectBuffer(buffer)
 
 }
