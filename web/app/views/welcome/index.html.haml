@@ -1,0 +1,38 @@
+#sequencer
+
+  %form#tracker
+
+    %input#msg.hide{max: "20000", min: "50", placeholder: "440", size: "10", type: "number", value: "440"}/
+
+    #seq-title
+      %button.pure-button.pure-button-primary{type: "submit"} ▶
+      %h3.lom Tracker
+
+    %canvas#composer{:width => 1200, :height => 1000}
+
+
+    -#%table.pure-table.pure-table-bordered
+    -#  %thead
+    -#    %tr
+    -#      %td Time
+    -#      %td Note
+    -#      %td Duration
+    -#      %td Vel
+    -#      %td Mod
+    -#  %tbody
+    -#    %tr
+    -#      %td 1|1|000
+    -#      %td
+    -#        .notator
+    -#      %td 481
+    -#      %td 127
+    -#      %td 0
+    -#    %tr
+    -#      %td 1|1|240
+    -#    %tr
+    -#      %td 1|1|480
+    -#    %tr
+    -#      %td 1|1|720
+    -#    %tr
+    -#      %td 1|2|000
+          

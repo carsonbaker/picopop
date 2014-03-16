@@ -1,0 +1,55 @@
+%form#tracker
+
+  #layout
+
+    #menu
+      .pure-menu.pure-menu-open
+        %a#title-img{href: "/"}<>
+          = image_tag 'title-small2.gif'
+
+      #controls
+
+        %small Playback
+        %br/
+
+        #network-indicator.hide
+        %button.pure-button.pure-button-primary{type: "submit"} ▶
+        %br/
+        %br/
+
+      #helpbox
+
+        %small Keys
+
+        %dl
+          %dt 1
+          %dd Add whole note
+          %dt 2
+          %dd Add half note
+          %dt 3
+          %dd Add quarter note
+          %dt 4
+          %dd Add eighth note
+
+        %dl
+          %dt h
+          %dd Move left
+          %dt j
+          %dd Move down
+          %dt k
+          %dd Move up
+          %dt l
+          %dd Move right
+          %dt x
+          %dd Delete
+        
+        %dl
+          %dt space
+          %dd Play
+
+  #main
+
+    %input#msg.hide{max: "20000", min: "50", placeholder: "440", size: "10", type: "number", value: "440"}/
+
+    #sequencer
+      %canvas#composer{:width => 1200, :height => 2000}

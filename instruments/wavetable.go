@@ -3,7 +3,7 @@ package instruments
 import (
   "math"
   "io/ioutil"
-  "github.com/carsonbaker/copenhagen/util"
+  "github.com/carsonbaker/picopop/util"
   "fmt"
 )
 

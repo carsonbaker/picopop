@@ -3,8 +3,7 @@ package main
 import (
   "github.com/gorilla/websocket"
   "net/http"
-  "strconv"
-  "github.com/carsonbaker/copenhagen/songs"
+  "github.com/carsonbaker/picopop/songs"
 )
 
 type connection struct {
@@ -23,15 +22,8 @@ func (c *connection) reader() {
       break
     }
 
-    freq, err := strconv.ParseFloat(string(message), 64)
-
-    if err != nil {
-      break
-    }
-
-    freq = freq + 1
-
-    buf := songs.RenderBeefyFartSong()
+    buf := songs.RenderJSONSong(message)
+    // buf := songs.RenderBeefyFartSong()
 
     c.send <- buf
 

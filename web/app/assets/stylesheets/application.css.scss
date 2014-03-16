@@ -1,0 +1,142 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require_self
+ *= require_tree .
+ */
+
+body {
+  background: #111;
+}
+
+.nom {
+  margin: 0;
+}
+
+.lom {
+  padding: 12px;
+  margin: 0;
+}
+
+.hide {
+  display: none;
+}
+
+#main {
+  margin-left: 150px;
+}
+
+.pure-menu-heading {
+  background: #02274c !important;
+}
+
+#sequencer {
+  border: 0;
+  padding: 50px;
+  background: #081529;
+  width: 1200px;
+  // tbody {
+  //   font-family: Courier;
+  // }
+  // td {
+  //   border-color: #333;
+  // }
+  // thead {
+  //   background: #444;
+  //   color: #aaa;
+  // }
+  // table {
+  //   background: #111;
+  //   border: none;
+  //   width: 100%;
+  // }
+}
+
+#composer {
+  background-color: #081529;
+}
+
+#seq-title {
+  background: #3d668e;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+#tracker button {
+  height: 30px;
+}
+
+.notator {
+  width: 300px;
+  background: #ccc;
+  height: 20px;
+}
+
+#network-indicator {
+  background: yellow;
+  height: 10px;
+  width: 10px;
+  float: right;
+}
+
+#controls {
+  background: #0c192e;
+  padding: 10px;
+  font-size: 12px;
+  border-top: 1px solid #444;
+}
+
+#helpbox {
+  padding: 10px 12px;
+  font-size: 12px;
+  background: #0c192e;
+  border-top: 1px solid #333;
+}
+
+dt {
+  float: left;
+  color: white;
+  text-transform: uppercase;
+}
+
+dd {
+  margin-left: 10px;
+  text-indent: 15px;
+}
+
+hr {
+  border-color: #333;
+}
+
+.pure-button {
+  border-radius: 0;
+}
+
+#title-img {
+  padding: 0 !important;
+  margin: 0 !important;
+  line-height: 0px;
+  font-size: 0px;
+}
+
+#menu {
+
+  border-right: 1px solid #333;
+
+  small {
+    font-size: 12px;
+    background: #08101d;
+    display: block;
+    padding: 9px 11px;
+    margin: 0 -12px;
+    margin-top: -10px;
+  }
+
+}

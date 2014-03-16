@@ -5,8 +5,8 @@ import(
   "math"
   "os"
   "fmt"
-  "github.com/carsonbaker/copenhagen/mixer"
-  "github.com/carsonbaker/copenhagen/global"
+  "github.com/carsonbaker/picopop/mixer"
+  "github.com/carsonbaker/picopop/global"
 )
 
 const SIZEOF_INT16 = 2 // in bytes
