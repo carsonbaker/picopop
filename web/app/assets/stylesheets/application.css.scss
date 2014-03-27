@@ -39,9 +39,9 @@ body {
 
 #sequencer {
   border: 0;
-  padding: 50px;
+  padding: 20px;
+  width: 2400px;
   background: #081529;
-  width: 1200px;
   // tbody {
   //   font-family: Courier;
   // }
@@ -61,6 +61,13 @@ body {
 
 #composer {
   background-color: #081529;
+  margin-top: 20px;
+}
+
+#time-indicators {
+  background: #333;
+  position: absolute;
+  border-bottom: 1px solid #888;
 }
 
 #seq-title {

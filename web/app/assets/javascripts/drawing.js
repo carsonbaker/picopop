@@ -23,3 +23,11 @@ function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
     ctx.fill();
   }        
 }
+
+var renderToCanvas = function (width, height, renderFunction) {
+  var buffer = document.createElement('canvas');
+  buffer.width = width;
+  buffer.height = height;
+  renderFunction(buffer.getContext('2d'));
+  return buffer;
+};

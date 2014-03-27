@@ -30,6 +30,8 @@
           %dd Add quarter note
           %dt 4
           %dd Add eighth note
+          %dt 5
+          %dd Add sixteenth note
 
         %dl
           %dt h
@@ -51,5 +53,6 @@
 
     %input#msg.hide{max: "20000", min: "50", placeholder: "440", size: "10", type: "number", value: "440"}/
 
+    %canvas#time-indicators{:width => 2500, :height => 20}
     #sequencer
-      %canvas#composer{:width => 1200, :height => 2000}
+      %canvas#composer{:width => 2500, :height => 740}

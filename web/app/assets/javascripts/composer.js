@@ -3,9 +3,10 @@ $(function() {
   var licks = {}
   var note_licks = {}
 
-  var cell_width = 20;
-  var cell_height = 10; // this is the height of a 16th note
+  var cell_width = 20; // this is the width of a 16th note
+  var cell_height = 12; 
   var half_cell_height = cell_height / 2;
+  var half_cell_width = cell_width / 2;
 
   var selected_cell_color = "#fee";
   var normal_cell_color = "#49a";
@@ -16,15 +17,15 @@ $(function() {
   var mouse_x, mouse_y;
 
   var view_height = $("#sequencer").height();
+  var view_width = $("#sequencer").width();
+
 
   $("#tracker").submit(function() {
     play_all_notes();
     event.preventDefault();
   });
 
-  var step_inc = 20;
-  var note_identifiers = ["c0","c0s","d0","d0s","e0","f0","f0s","g0","g0s","a0","a0s","b0","c1","c1s","d1","d1s","e1","f1","f1s","g1","g1s","a1","a1s","b1","c2","c2s","d2","d2s","e2","f2","f2s","g2","g2s","a2","a2s","b2","c3","c3s","d3","d3s","e3","f3","f3s","g3","g3s","a3","a3s","b3","c4","c4s","d4","d4s","e4","f4","f4s","g4","g4s","a4","a4s","b4","c5","c5s","d5","d5s","e5","f5","f5s","g5","g5s","a5","a5s","b5","c6","c6s","d6","d6s","e6","f6","f6s"]
-
+  var note_identifiers = ["b5", "a5s", "a5", "g5s", "g5", "f5s", "f5", "e5", "d5s", "d5", "c5s", "c5", "b4", "a4s", "a4", "g4s", "g4", "f4s", "f4", "e4", "d4s", "d4", "c4s", "c4", "b3", "a3s", "a3", "g3s", "g3", "f3s", "f3", "e3", "d3s", "d3", "c3s", "c3", "b2", "a2s", "a2", "g2s", "g2", "f2s", "f2", "e2", "d2s", "d2", "c2s", "c2", "b1", "a1s", "a1", "g1s", "g1", "f1s", "f1", "e1", "d1s", "d1", "c1s", "c1"]
 
   // initialize an inversion of the note map, for convenience
   var note_inverse_map = {}
@@ -44,40 +45,42 @@ $(function() {
   }
 
   half_step_up = function(note) {
-    return note_identifiers[note_inverse_map[note] + 1]
+    return note_identifiers[note_inverse_map[note] - 1] || note_identifiers[0]
   }
 
   half_step_down = function(note) {
-    return note_identifiers[note_inverse_map[note] - 1]
+    return note_identifiers[note_inverse_map[note] + 1] || note_identifiers[note_identifiers.length-1]
   }
 
+  t = $("#time-indicators")[0].getContext("2d")
   c = $('#composer')[0].getContext("2d");
 
-  drawLines = function() {
-    c.lineWidth   = 1.0;
+  drawLines = function(c) {
 
-    for (var y = 0; y < view_height; y += 40) {
+    c.lineWidth = 1.0;
 
-      if(y % 160 == 0) {
+    for (var x = 0; x < view_width; x += cell_width) {
+
+      if(x % 320 == 0) {
         stroke_style = '#b9e3ff';
       }
-      else if(y % 80 == 0) {
+      else if(x % 80 == 0) {
         stroke_style = '#555';
       } else {
         stroke_style = '#333';
       }
 
-      pos_y = y + 0.5;
+      pos_x = x + 0.5;
 
-      for (var x = 0; x < 12 * 5; x++) {
+      for (var y = 0; y < (12 * 5) + 1; y++) {
 
-        if(x % 12 == 0) {
-          c.strokeStyle = '#888';
+        if(y % 12 == 0) {
+          c.strokeStyle = '#fff';
         } else {
           c.strokeStyle = stroke_style;
         }
 
-        pos_x = x * step_inc + 0.5;
+        pos_y = y * cell_height + 0.5;
         c.beginPath();
         c.moveTo(pos_x, pos_y);
         c.lineTo(pos_x, pos_y+0.5);
@@ -86,6 +89,8 @@ $(function() {
       }
     }
   }
+
+  var background_grid_buffer = renderToCanvas(view_width, view_height, drawLines);
 
   drawLicks = function() {
     for(var key in licks) {
@@ -97,30 +102,39 @@ $(function() {
       }
       pos = pos_for_lick(lick)
       c.beginPath();
-      c.rect(pos[0] + 0.5, pos[1] + 0.5, step_inc, cell_height * lick["dura"]);
+      c.rect(pos[0] + 0.5, pos[1] + 0.5, cell_width * lick["dura"], cell_height);
       c.closePath();
-      // roundRect(c, pos[0] + 0.5, pos[1] + 0.5, step_inc, cell_height * lick["dura"], 4)
+      // roundRect(c, pos[0] + 0.5, pos[1] + 0.5, cell_height * lick["dura"], cell_height, 10)
       c.stroke();
       c.fill();
     }
   }
 
+  drawTimeMarkers = function() {
+    t.fillStyle = "#fff"
+    t.font = "11px Arial";
+    for (var x = 0; x < view_width; x ++) {
+      t.fillText(x, x * cell_width * 16 + 18, 14);
+    }
+  }
+
   redraw = function(x) {
-    c.clearRect(0, 0, 1200, 1000);
-    drawLines();
+    c.clearRect(0, 0, view_width, view_height);
+    c.drawImage(background_grid_buffer, 0, 0);
     drawLicks();
+    drawTimeMarkers();
   }
 
   pos_for_lick = function(lick) {
-    return [note_identifiers.indexOf(lick['note']) * step_inc, lick['tick'] * cell_height]
+    return [lick['tick'] * cell_width, note_identifiers.indexOf(lick['note']) * cell_height]
   }
 
-  note_for_pos = function(x) {
-    return note_identifiers[Math.floor(x / step_inc)]
+  note_for_pos = function(y) {
+    return note_identifiers[Math.floor(y / cell_height)]
   }
 
-  tick_for_pos = function(y) {
-    return Math.round(y / 10);
+  tick_for_pos = function(x) {
+    return Math.floor(x / cell_width);
   }
 
   move_lick = function(lick, new_tick, new_note) {
@@ -147,8 +161,8 @@ $(function() {
 
   update_note_on_drag = function(e) {
     // document.body.style.cursor = 'move';
-    drag_tick = tick_for_pos(e.offsetY - half_cell_height)
-    drag_note = note_for_pos(e.offsetX)
+    drag_tick = tick_for_pos(e.offsetX)
+    drag_note = note_for_pos(e.offsetY)
 
     // if we haven't moved the lick to another part of the grid, just stop
     if(drag_tick == current_selection["tick"] && drag_note == current_selection["note"]) { return }
@@ -170,10 +184,9 @@ $(function() {
   }
 
   $("body").on("keydown", function(e) {
-    console.log("Key down: " + e.keyCode)
 
     var x = mouse_x
-    var y = mouse_y - half_cell_height
+    var y = mouse_y
 
     switch(e.keyCode) {
       case 49: // 1 (add whole note)
@@ -188,6 +201,9 @@ $(function() {
       case 52: // 4 (add eighth note)
         lick = add_select_and_play_lick(x, y, 2)
         break;
+      case 53: // 4 (add sixteenth note)
+        lick = add_select_and_play_lick(x, y, 1)
+        break;
       case 32: // play (space)
         play_all_notes();
         event.preventDefault();
@@ -196,16 +212,17 @@ $(function() {
         delete_lick(current_selection)
         break;
       case 76: // right (l)
-        move_lick(current_selection, current_selection["tick"], half_step_up(current_selection["note"]))
+        move_lick(current_selection, current_selection["tick"] + 1, current_selection["note"])
         break;
       case 72: // left (h)
-        move_lick(current_selection, current_selection["tick"], half_step_down(current_selection["note"]))
-        break;
-      case 75: // up (k)
         move_lick(current_selection, current_selection["tick"] - 1, current_selection["note"])
         break;
+      case 75: // up (k)
+        move_lick(current_selection, current_selection["tick"], half_step_up(current_selection["note"]))
+        break;
       case 74: // down (j)
-        move_lick(current_selection, current_selection["tick"] + 1, current_selection["note"])
+        move_lick(current_selection, current_selection["tick"], half_step_down(current_selection["note"]))
+        
         break;
     }
 
@@ -214,6 +231,8 @@ $(function() {
 
   $("#composer").on("mouseout", function(e) {
     document.body.style.cursor = 'default';
+    is_dragging = false;
+    this.onmousemove = null;
   });
 
   $("#composer").on("mouseover", function(e) {
@@ -237,8 +256,9 @@ $(function() {
   });
 
   lick_hit_detection = function(x, y) {
-    click_note = note_for_pos(x)
-    click_tick = tick_for_pos(y)
+
+    click_tick = tick_for_pos(x)
+    click_note = note_for_pos(y)
 
     for(tick_key in note_licks[click_note]) {
       if(tick_key <= click_tick) {
@@ -253,8 +273,8 @@ $(function() {
 
   add_a_lick = function(x, y, duration) {
 
-    click_note = note_for_pos(x)
-    click_tick = tick_for_pos(y)
+    click_tick = tick_for_pos(x)
+    click_note = note_for_pos(y)
 
     lick = {}
     lick["tick"] = click_tick
@@ -290,7 +310,7 @@ $(function() {
   $("#composer").on("mousedown", function(e) {
 
     // is this a selection?
-    lick = lick_hit_detection(e.offsetX, e.offsetY - half_cell_height)
+    lick = lick_hit_detection(e.offsetX, e.offsetY)
 
     if(lick) {
       // yep, cool we're making a selection now
@@ -306,7 +326,7 @@ $(function() {
 
     } else {
       // not a selection. add a quarter note!
-      add_select_and_play_lick(e.offsetX, e.offsetY - half_cell_height, 4)
+      add_select_and_play_lick(e.offsetX, e.offsetY, 4)
 
     }
 
@@ -317,6 +337,8 @@ $(function() {
 
   });
 
+  // this is to draw the screen initially
+  // it is only called once
   redraw();
 
 });
