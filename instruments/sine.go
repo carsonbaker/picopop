@@ -2,8 +2,8 @@ package instruments
 
 import (
   "math"
-  "github.com/carsonbaker/picopop/util"
-  "github.com/carsonbaker/picopop/global"
+  "../util"
+  "../global"
 )
 
 type SineGenerator struct {

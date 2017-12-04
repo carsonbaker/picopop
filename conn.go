@@ -3,7 +3,7 @@ package main
 import (
   "github.com/gorilla/websocket"
   "net/http"
-  "github.com/carsonbaker/picopop/songs"
+  "./songs"
 )
 
 type connection struct {

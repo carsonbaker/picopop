@@ -5,7 +5,7 @@ import (
   "log"
   "net/http"
   "os"
-  "github.com/carsonbaker/picopop/util"
+  "./util"
 )
 
 var addr = flag.String("addr", ":8080", "http service address")

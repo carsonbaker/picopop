@@ -1,9 +1,8 @@
 package sequencer
 
 import (
-  "github.com/carsonbaker/picopop/instruments"
-  "github.com/carsonbaker/picopop/global"
-
+  "../instruments"
+  "../global"
 )
 
 type Note struct {

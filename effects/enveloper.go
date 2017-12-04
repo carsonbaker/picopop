@@ -1,7 +1,5 @@
 package effects
 
-
-
 type Enveloper struct {
 
 }

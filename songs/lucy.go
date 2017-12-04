@@ -1,11 +1,11 @@
 package songs
 
 // import(
-//   "github.com/carsonbaker/picopop/sequencer"
-//   "github.com/carsonbaker/picopop/mixer"
-//   "github.com/carsonbaker/picopop/global"
-//   "github.com/carsonbaker/picopop/util"
-//   "github.com/carsonbaker/picopop/instruments"
+//   "sequencer"
+//   "mixer"
+//   "global"
+//   "util"
+//   "instruments"
 // )
 
 // func RenderLucyInTheSkySong() []byte {

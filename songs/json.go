@@ -3,11 +3,11 @@ package songs
 import(
   "encoding/json"
   "fmt"
-  "github.com/carsonbaker/picopop/sequencer"
-  "github.com/carsonbaker/picopop/mixer"
-  "github.com/carsonbaker/picopop/global"
-  "github.com/carsonbaker/picopop/util"
-  "github.com/carsonbaker/picopop/instruments"
+  "../sequencer"
+  "../mixer"
+  "../global"
+  "../util"
+  "../instruments"
 )
 
 type NoteSequence struct {

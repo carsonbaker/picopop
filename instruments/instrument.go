@@ -1,7 +1,7 @@
 package instruments
 
 import (
-  "github.com/carsonbaker/picopop/effects"
+  "../effects"
 )
 
 type Instrument interface {

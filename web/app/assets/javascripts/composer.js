@@ -20,7 +20,7 @@ $(function() {
   var view_width = $("#sequencer").width();
 
 
-  $("#tracker").submit(function() {
+  $("#tracker").submit(function(event) {
     play_all_notes();
     event.preventDefault();
   });
